@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: natsapp
+  labels:
+    app: natsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: natsapp
+  template:
+    metadata:
+      labels:
+        app: natsapp
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "natsapp"
+        dapr.io/port: "8080"
+        dapr.io/log-level: "debug"
+    spec:
+      containers:
+      - name: natsapp
+        image: abhirockzz/dapr-nats-pubsub
+        env:
+        - name: APP_PORT
+          value: "8080"
+        - name: NATS_SUBJECT
+          value: "testsubject"
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always
